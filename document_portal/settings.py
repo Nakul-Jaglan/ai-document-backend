@@ -32,7 +32,7 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 # Gemini API Key
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ai-document-backend.onrender.com', '127.0.0.1']
 
 
 # Application definition
@@ -148,10 +148,9 @@ SIMPLE_JWT = {
 }
 
 # CORS settings
-CORS_ALLOW_ALL_ORIGINS = True  # Only for development
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    'https://document-portal-frontend.vercel.app'
+    'https://ai-document-frontend.vercel.app',
 ]
 
 # Media files
