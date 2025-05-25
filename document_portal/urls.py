@@ -22,12 +22,18 @@ from rest_framework.routers import DefaultRouter
 from documents.views import UserViewSet, DocumentViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.views.static import serve
+from django.http import JsonResponse
+
+# Add a simple root view to confirm the API is working
+def api_root(request):
+    return JsonResponse({"message": "API is running. Use /api/ to access endpoints."})
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'documents', DocumentViewSet, basename='document')
 
 urlpatterns = [
+    path('', api_root, name='api_root'),  # Add a root path handler
     path('admin/', admin.site.urls),
     path('api/auth/register/', UserViewSet.as_view({'post': 'create'}), name='register'),
     path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
