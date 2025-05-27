@@ -151,6 +151,7 @@ SIMPLE_JWT = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'https://ai-document-frontend.vercel.app',
+    'https://docai.nakul.click/'
 ]
 
 # Media files
