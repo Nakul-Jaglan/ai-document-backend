@@ -32,7 +32,7 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 # Gemini API Key
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-ALLOWED_HOSTS = ['ai-document-backend.onrender.com', '127.0.0.1']
+ALLOWED_HOSTS = ['ai-document-backend.onrender.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -136,7 +136,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'documents.clerk_auth.ClerkAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Keep as fallback
     ),
 }
 
@@ -151,7 +152,8 @@ SIMPLE_JWT = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'https://ai-document-frontend.vercel.app',
-    'https://docai.nakul.click/'
+    'https://docai.nakul.click',
+    'http://localhost:3000'
 ]
 
 # Media files

@@ -1,0 +1,35 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.staging
+
+# Database
+*.sqlite3
+db.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.venv/
+venv/
+
+# Media files (uploaded documents)
+media/
+
+# Static files (collected for production)
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
