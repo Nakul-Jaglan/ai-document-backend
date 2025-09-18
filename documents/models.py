@@ -28,3 +28,16 @@ class Document(models.Model):
         if self.file:
             if self.file.size > 10 * 1024 * 1024:  # 10MB limit
                 raise ValidationError('File size cannot exceed 10MB.')
+
+class Conversation(models.Model):
+    document = models.ForeignKey(Document, on_delete=models.CASCADE, related_name='conversations')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conversations')
+    question = models.TextField()
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.document.title} - {self.question[:50]}..."
+
+    class Meta:
+        ordering = ['created_at']

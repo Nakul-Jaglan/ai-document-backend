@@ -3,8 +3,8 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from .models import Document
-from .serializers import UserSerializer, DocumentSerializer
+from .models import Document, Conversation
+from .serializers import UserSerializer, DocumentSerializer, ConversationSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 import os
 import json
@@ -168,7 +168,19 @@ Please provide a clear and concise answer based only on the information present 
                     )
 
                 answer = data['candidates'][0]['content']['parts'][0]['text']
-                return Response({'answer': answer})
+                
+                # Save the conversation to database
+                conversation = Conversation.objects.create(
+                    document=document,
+                    user=self.request.user,
+                    question=question,
+                    answer=answer
+                )
+                
+                return Response({
+                    'answer': answer,
+                    'conversation_id': conversation.id
+                })
 
             except requests.exceptions.RequestException as e:
                 print(f"Request Exception: {str(e)}")
@@ -200,6 +212,14 @@ Please provide a clear and concise answer based only on the information present 
                 {'error': f'Failed to process document: {str(e)}'}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+    @action(detail=True, methods=['get'])
+    def conversations(self, request, pk=None):
+        """Get conversation history for a specific document"""
+        document = self.get_object()
+        conversations = document.conversations.filter(user=self.request.user)
+        serializer = ConversationSerializer(conversations, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=['get'])
     def list_models(self, request):
