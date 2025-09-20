@@ -23,10 +23,19 @@ from documents.views import UserViewSet, DocumentViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.views.static import serve
 from django.http import JsonResponse
+from django.utils import timezone
 
 # Add a simple root view to confirm the API is working
 def api_root(request):
     return JsonResponse({"message": "API is running. Use /api/ to access endpoints."})
+
+# Add a health check endpoint for uptime monitoring
+def health_check(request):
+    return JsonResponse({
+        "status": "healthy",
+        "message": "Backend server is running",
+        "timestamp": timezone.now().isoformat()
+    })
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -34,6 +43,7 @@ router.register(r'documents', DocumentViewSet, basename='document')
 
 urlpatterns = [
     path('', api_root, name='api_root'),  # Add a root path handler
+    path('health/', health_check, name='health_check'),  # Health check endpoint
     path('admin/', admin.site.urls),
     path('api/auth/register/', UserViewSet.as_view({'post': 'create'}), name='register'),
     path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
